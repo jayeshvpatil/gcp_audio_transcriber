@@ -1,0 +1,3 @@
+ffmpeg-python
+google-cloud-speech
+google-cloud-storage
