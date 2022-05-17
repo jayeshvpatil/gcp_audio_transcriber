@@ -8,7 +8,7 @@ bucket_name = "jvp_test"
 prefix = "gs://"
 
 
-def decode_audio(in_filename):
+def process_audio(in_filename):
     try:
         out, err = (
             ffmpeg.input(in_filename)
@@ -22,7 +22,7 @@ def decode_audio(in_filename):
     return out
 
 
-def upload_proc_aud_to_gcs(processed_audio):
+def upload_gcs(processed_audio):
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob("processed_file.pcm")
@@ -49,8 +49,8 @@ def get_transcripts(audio_uri):
 
 
 def transcribe(in_filename):
-    processed_audio = decode_audio(in_filename)
-    gcs_uri = upload_proc_aud_to_gcs(processed_audio)
+    processed_audio = process_audio(in_filename)
+    gcs_uri = upload_gcs(processed_audio)
     # gcs_uri = "gs://jvp_test/processed_file.pcm"
     transcripts = get_transcripts(gcs_uri)
 
@@ -62,3 +62,4 @@ def transcribe(in_filename):
 
 transcribe("test.wav")
 # decode_audio("test.wav")
+
